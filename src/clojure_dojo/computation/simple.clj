@@ -1,5 +1,5 @@
 (ns colojure-dojo.computation.simple
-  (:refer-clojure :exclude [boolean sequence]))
+  (:refer-clojure :exclude [boolean sequence while reduce]))
 
 (defprotocol SimpleSyntax
   (->str [_])
@@ -129,6 +129,15 @@
                                                               environment)]
               [(build s reduced-first (:second-syntax s)) reduced-environment]))))
 
+(def-syntax while [condition body]
+  (->str [s] (format "while (%s) { %s }"
+                     (->str (:condition s))
+                     (->str (:body s))))
+  (reducible? [_] true)
+  (reduce [s environment]
+          [(iff (:condition s) (sequence (:body s) s) (do-nothing))
+           environment]))
+
 (defn print-statement [machine]
   (println (format "%s, %s"
                    (-> machine :statement deref ->str)
@@ -142,9 +151,9 @@
               (reset! statement new-statement)
               (reset! environment new-environment)))
   (run [m]
-    (while (-> m :statement deref reducible?)
-             (print-statement m)
-             (step m))
+    (clojure.core/while (-> m :statement deref reducible?)
+      (print-statement m)
+      (step m))
     (print-statement m)))
 
 (defn machine [statement environment]
