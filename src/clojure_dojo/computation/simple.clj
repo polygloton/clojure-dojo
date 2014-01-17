@@ -1,5 +1,5 @@
 (ns colojure-dojo.computation.simple
-  (:refer-clojure :exclude [boolean]))
+  (:refer-clojure :exclude [boolean sequence]))
 
 (defprotocol SimpleSyntax
   (->str [_])
@@ -61,20 +61,17 @@
 (def-syntax add [left right]
   (->str [s] (infix-syntax->str s \+))
   (reducible? [_] true)
-  (reduce [s env] [(reduce-infix-syntax s env number +)
-                   env]))
+  (reduce [s env] (reduce-infix-syntax s env number +)))
 
 (def-syntax multiply [left right]
   (->str [s] (infix-syntax->str s \*))
   (reducible? [_] true)
-  (reduce [s env] [(reduce-infix-syntax s env number *)
-                   env]))
+  (reduce [s env] (reduce-infix-syntax s env number *)))
 
 (def-syntax less-than [left right]
   (->str [s] (infix-syntax->str s \<))
   (reducible? [_] true)
-  (reduce [s env] [(reduce-infix-syntax s env boolean <)
-                   env]))
+  (reduce [s env] (reduce-infix-syntax s env boolean <)))
 
 (def-syntax variable [name]
   (->str [s] (-> s :name str))
@@ -84,7 +81,7 @@
 (def-syntax do-nothing []
   (->str [_] "do-nothing")
   (reducible? [_] false)
-  (reduce [s env] [s env]))
+  (reduce [s env] s))
 
 (def-syntax assign [name expression]
   (->str [s] (format "%s %c %s" name \= (->str (:expression s))))
@@ -119,6 +116,18 @@
 
              (= condition (boolean false))
              [alternative environment]))))
+
+(def-syntax sequence [first-syntax second-syntax]
+  (->str [s] (format "%s; %s"
+                     (->str (:first-syntax s))
+                     (->str (:second-syntax s))))
+  (reducible? [_] true)
+  (reduce [s environment]
+          (if (= (:first-syntax s) (do-nothing))
+            [(:second-syntax s) environment]
+            (let [[reduced-first reduced-environment] (reduce (:first-syntax s)
+                                                              environment)]
+              [(build s reduced-first (:second-syntax s)) reduced-environment]))))
 
 (defn print-statement [machine]
   (println (format "%s, %s"
