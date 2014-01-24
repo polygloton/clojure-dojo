@@ -43,6 +43,19 @@ if (false) { :x = :x * 3; while (:x < 5) { :x = :x * 3 } } else { do-nothing }, 
 do-nothing, {:x 9}
 ```
 
+### The Reasoned Schemer
+
+I implemented many of the examples from The Reasoned Schemer using core.logic.
+I gave it up when differences between the mini-kanren and core.logic became
+problematic.  Some day I'd like to start again using Jim Duey's
+implementation of [mini-kanren](https://github.com/jduey/mini-kanren).
+
+Excersie the code with these tests.
+
+```bash
+lein test :reasoned-schemer
+```
+
 
 ## License
 
