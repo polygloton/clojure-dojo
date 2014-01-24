@@ -7,6 +7,7 @@
   :min-lein-version "2.0.0"
   :pendantic? :warn
   :dependencies [[org.clojure/clojure "1.5.1"]
-                 [org.clojure/core.logic "0.7.5"]]
+                 [org.clojure/core.logic "0.7.5"]
+                 [org.apache.commons/commons-math3 "3.0"]]
   :test-selectors {:default (constantly false)
                    :reasoned-schemer :reasoned-schemer})
