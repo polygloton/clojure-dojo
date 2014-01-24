@@ -51,7 +51,7 @@ using core.logic.  I gave it up when differences between the mini-kanren and
 core.logic became problematic.  Some day I'd like to start again using Jim Duey's
 implementation of [mini-kanren](https://github.com/jduey/mini-kanren).
 
-Excersie the code with these tests.
+Exercise the code with these tests.
 
 ```bash
 lein test :reasoned-schemer
