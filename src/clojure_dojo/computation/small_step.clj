@@ -1,13 +1,13 @@
-(ns colojure-dojo.computation.simple
+(ns colojure-dojo.computation.small-step
   (:refer-clojure :exclude [boolean sequence while reduce]))
 
-(defprotocol SimpleSyntax
+(defprotocol SmallStepSyntax
   (->str [_])
   (reducible? [_])
   (reduce [_ _])
   (build [_] [_ _] [_ _ _] [_ _ _ _]))
 
-(defprotocol SimpleMachine
+(defprotocol SmallStepMachine
   (step [_])
   (run [_]))
 
@@ -19,7 +19,7 @@
   (let [syntax-type (gensym name)]
     `(do
        (defrecord ~syntax-type ~args
-         SimpleSyntax
+         SmallStepSyntax
          ~@methods
          ~(case (count args)
             0 `(build [s#]
@@ -143,8 +143,8 @@
                    (-> machine :statement deref ->str)
                    (-> machine :environment deref))))
 
-(defrecord SimpleMutatingMachine [statement environment]
-  SimpleMachine
+(defrecord SmallStepMutatingMachine [statement environment]
+  SmallStepMachine
   (step [m] (let [environment (:environment m)
                   statement (:statement m)
                   [new-statement new-environment] (reduce @statement @environment)]
@@ -157,4 +157,4 @@
     (print-statement m)))
 
 (defn machine [statement environment]
-  (SimpleMutatingMachine. (atom statement) (atom environment)))
+  (SmallStepMutatingMachine. (atom statement) (atom environment)))

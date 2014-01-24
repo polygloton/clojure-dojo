@@ -10,7 +10,7 @@ As I read the book, I am translating the examples from Ruby to Clojure.
 
 The following code...
 ```clojure
-;; in clojure-dojo.computation.simple
+;; in clojure-dojo.computation.small-step
 
 (run (machine (while (less-than (variable :x) (number 5))
                      (assign :x (multiply (variable :x) (number 3))))
