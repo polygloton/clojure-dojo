@@ -46,6 +46,6 @@ do-nothing, {:x 9}
 
 ## License
 
-Copyright © 2013 Stephen Sloan
+Copyright © 2013-2014 Stephen Sloan
 
 Licensed under the MIT License, see LICENSE.txt
