@@ -7,39 +7,28 @@
   ([real imaginary]
      (Complex. real imaginary)))
 
-(defn i
+(defn imaginary
   ([] Complex/I)
   ([imaginary] (complex 0.0 imaginary)))
 
-(defmulti multiply (fn [product _]
-                     (class product)))
+(def i imaginary)
 
-(defmethod multiply Complex [product complex-number]
-  (.multiply complex-number
-             product))
+(defmacro def-oper [name fun]
+  `(do
+     (defmulti ~name (fn [operand# _#]
+                       (class operand#)))
+     (defmethod ~name Complex [operand# complex-num#]
+       (~fun operand# complex-num#))
+     (defmethod ~name Double [operand# complex-num#]
+       (~fun (complex operand#)
+             complex-num#))
+     (defmethod ~name Long [operand# complex-num#]
+       (~fun (complex (.doubleValue operand#))
+             complex-num#))))
 
-(defmethod multiply Double [product complex-number]
-  (.multiply complex-number
-            (complex product)))
+(def-oper multiply #(.multiply %1 %2))
 
-(defmethod multiply Long [product complex-number]
-  (.multiply (complex (.doubleValue product))
-             complex-number))
-
-(defmulti add (fn [addend _]
-                 (class addend)))
-
-(defmethod add Complex [addend complex-number]
-  (.add complex-number
-        addend))
-
-(defmethod add Double [addend complex-number]
-  (.add complex-number
-        (complex addend)))
-
-(defmethod add Long [addend complex-number]
-  (.add complex-number
-        (complex (.doubleValue addend))))
+(def-oper add #(.add %1 %2))
 
 (defn number->str [number]
   (if (== number (.intValue number))
@@ -47,11 +36,21 @@
     (format "%s" number)))
 
 (defmethod clojure.core/print-method Complex [c ^java.io.Writer w]
-  (.write w (condp == 0
-                (.getReal c) (format "%si"
-                                     (number->str (.getImaginary c)))
-                (.getImaginary c) (format "%s"
-                                          (number->str (.getReal c)))
-                (format "%s + %si"
-                        (number->str (.getReal c))
-                        (number->str (.getImaginary c))))))
+  (.write w (let [real-num (.getReal c)
+                  imag-num (.getImaginary c)]
+              (cond
+               (and (zero? real-num) (zero? imag-num))
+               "0"
+               
+               (zero? real-num)
+               (format "%si"
+                       (number->str imag-num))
+               
+               (zero? imag-num)
+               (format "%s"
+                       (number->str real-num))
+
+               :else
+               (format "%s+%si"
+                       (number->str real-num)
+                       (number->str imag-num))))))
