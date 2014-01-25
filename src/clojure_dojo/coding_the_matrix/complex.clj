@@ -16,21 +16,33 @@
 
 (def i imaginary)
 
-(defn multiply [n1 n2]
-  (.multiply (complex n1)
-             (complex n2)))
+(defn multiply
+  ([n1 n2]
+     (.multiply (complex n1)
+                (complex n2)))
+  ([n1 n2 & more]
+     (reduce multiply (multiply n1 n2) more)))
 
-(defn divide [n1 n2]
-  (.divide (complex n1)
+(defn divide
+  ([n1 n2]
+     (.divide (complex n1)
+              (complex n2)))
+  ([n1 n2 & more]
+     (reduce divide (divide n1 n2) more)))
+
+(defn add
+  ([n1 n2]
+     (.add (complex n1)
            (complex n2)))
+  ([n1 n2 & more]
+     (reduce add (add n1 n2) more)))
 
-(defn add [n1 n2]
-  (.add (complex n1)
-        (complex n2)))
-
-(defn subtract [n1 n2]
-  (.subtract (complex n1)
-             (complex n2)))
+(defn subtract
+  ([n1 n2]
+     (.subtract (complex n1)
+                (complex n2)))
+  ([n1 n2 & more]
+     (reduce subtract (subtract n1 n2) more)))
 
 (defn square [n1]
   (.multiply (complex n1)
@@ -65,6 +77,13 @@
     (format "%d" (.intValue number))
     (format "%s" number)))
 
+(defn imaginary->str [number]
+  (case number
+    0.0 "0"
+    1.0 "i"
+    -1.0 "-i"
+    (str (number->str number) "i")))
+
 (defn complex->str [c]
   (let [real-num (.getReal c)
         imag-num (.getImaginary c)]
@@ -72,24 +91,14 @@
      (and (zero? real-num) (zero? imag-num))
      "0"
 
-     (= Complex/I c)
-     "i"
-
-     (= (i -1) c)
-     "-i"
-     
      (zero? real-num)
-     (format "%si"
-             (number->str imag-num))
+     (imaginary->str imag-num)
                
      (zero? imag-num)
-     (format "%s"
-             (number->str real-num))
+     (number->str real-num)
 
      :else
-     (format "%s + %si"
-             (number->str real-num)
-             (number->str imag-num)))))
+     (str (number->str real-num) " + " (imaginary->str imag-num)))))
 
 (defmethod clojure.core/print-method Complex [c ^java.io.Writer w]
   (.write w (complex->str c)))
