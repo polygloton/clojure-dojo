@@ -30,6 +30,8 @@
 
 (def-oper add #(.add %1 %2))
 
+(def-oper subtract #(.subtract %1 %2))
+
 (defn number->str [number]
   (if (== number (.intValue number))
     (format "%d" (.intValue number))
