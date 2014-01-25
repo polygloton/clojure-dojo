@@ -3,6 +3,10 @@
 This is my personal space for practicing and learning how to program,
 specifically using Clojure.  This is my personal coding dojo.
 
+## Coding The Matrix
+
+I am working on [Coding The Matrix](http://codingthematrix.com/).  Of course I am translating the Python code into Clojure as I go.
+
 ## Understanding Computation
 
 I am working through [Understanding Computation](http://computationbook.com/).
