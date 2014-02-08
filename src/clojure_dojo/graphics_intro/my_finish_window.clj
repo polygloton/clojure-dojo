@@ -5,4 +5,4 @@
 (defn add-window-listener [g]
   (.addWindowListener g (proxy [WindowAdapter] []
                           (windowClosing [^WindowEvent e]
-                            (System/exit 0)))))
+                            (.dispose g)))))
