@@ -16,33 +16,22 @@
 
 (def i imaginary)
 
-(defn multiply
-  ([n1 n2]
-     (.multiply (complex n1)
-                (complex n2)))
-  ([n1 n2 & more]
-     (reduce multiply (multiply n1 n2) more)))
+(defmacro defoper [oper-sym]
+  `(defn ~oper-sym
+     ([n1# n2#]
+        (~(symbol (str "." oper-sym))
+         (complex n1#)
+         (complex n2#)))
+     ([n1# n2# & more#]
+        (reduce ~oper-sym (~oper-sym n1# n2#) more#))))
 
-(defn divide
-  ([n1 n2]
-     (.divide (complex n1)
-              (complex n2)))
-  ([n1 n2 & more]
-     (reduce divide (divide n1 n2) more)))
+(defoper multiply)
 
-(defn add
-  ([n1 n2]
-     (.add (complex n1)
-           (complex n2)))
-  ([n1 n2 & more]
-     (reduce add (add n1 n2) more)))
+(defoper divide)
 
-(defn subtract
-  ([n1 n2]
-     (.subtract (complex n1)
-                (complex n2)))
-  ([n1 n2 & more]
-     (reduce subtract (subtract n1 n2) more)))
+(defoper add)
+
+(defoper subtract)
 
 (defn square [n1]
   (.multiply (complex n1)
