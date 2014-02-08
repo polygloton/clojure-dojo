@@ -34,8 +34,8 @@
 (defoper subtract)
 
 (defn square [n1]
-  (.multiply (complex n1)
-             (complex n1)))
+  (let [complex-n1 (complex n1)]
+    (.multiply complex-n1 complex-n1)))
 
 (defn pow [base exp]
   (if (neg? exp)
