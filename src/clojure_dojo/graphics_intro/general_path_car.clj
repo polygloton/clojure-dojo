@@ -57,8 +57,7 @@
                    (line-to 60 100)  ;; hood
                    (line-to 60 120)  ;; front
                    ))
-              (draw-simple-coordinate-system 200 150)
-              )))
+              (draw-simple-coordinate-system 200 150))))
       (enable-close-button)
       (set-title "GeneralPath example")
       (set-size 250 200)
