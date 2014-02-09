@@ -20,14 +20,14 @@
         (set-font (font "sansserif" PLAIN 9))
         (set-basic-stroke 1.0)
         (draw-line x-offset y-offset x-max y-offset)
-        (->/for [i (range (+ x-offset step) x-max step)]
+        (->/for [i (range (+ x-offset step) (inc x-max) step)]
           (-> (draw-line i (- y-offset 2)
                          i (+ y-offset 2))
               (draw-string (str i)
                            (- i 7) (- y-offset 7))))
         (draw-line x-offset y-offset
                    x-offset y-max)
-        (->/for [i (range (+ y-offset step) y-max step)]
+        (->/for [i (range (+ y-offset step) (inc y-max) step)]
           (-> (draw-line (- x-offset 2) i
                          (+ x-offset 2) i)
               (draw-string (str (if (> i 99) "" "   ") i)
