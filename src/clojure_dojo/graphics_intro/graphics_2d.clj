@@ -30,12 +30,12 @@
 (defn set-basic-stroke [g2d stroke]
   (set-stroke g2d (BasicStroke. stroke)))
 
-(comment (defmacro with-font-> [^Graphics2D g2d font & sexprs]
-           `(let [^Font orig-font# (get-font ~g2d)]
-              (set-font ~g2d ~font)
-              (let [result# (-> ~g2d ~@sexprs)]
-                (set-font ~g2d orig-font#)
-                result#))))
+(defmacro with-font-> [^Graphics2D g2d ^Font font & sexprs]
+  `(let [^Font orig-font# (.getFont ~g2d)]
+     (.setFont ~g2d ~font)
+     (let [result# (-> ~g2d ~@sexprs)]
+       (.setFont ~g2d orig-font#)
+       result#)))
 
 (defmacro font [name style size]
   `(java.awt.Font. ~name ~(symbol (format "java.awt.Font/%s" style)) ~size))
