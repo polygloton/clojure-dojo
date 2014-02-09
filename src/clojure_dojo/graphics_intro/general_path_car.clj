@@ -14,7 +14,7 @@
 
 (defn draw-simple-coordinate-system [^Graphics2D g2d x-max y-max]
   (let [x-offset 30
-        y-offset 50
+        y-offset 40
         step 20]
     (-> g2d
         (with-font-> (font "sansserif" PLAIN 9)
