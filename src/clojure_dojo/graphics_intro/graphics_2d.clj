@@ -3,8 +3,21 @@
   (:require [clojure-dojo.graphics-intro.definitions :refer :all])
   (:import java.awt.RenderingHints
            java.awt.BasicStroke
+           java.awt.Frame
+           java.awt.Graphics
            java.awt.Graphics2D
            java.awt.Font))
+
+(defmacro paint [[graphics-2d-sym] & sexprs]
+  `(proxy [Frame] []
+     (paint [^Graphics g#]
+       (let [~graphics-2d-sym (cast Graphics2D g#)]
+         ~@sexprs))))
+
+(defmacro paint-> [graphics-2d-sym & sexprs]
+  `(paint [~graphics-2d-sym]
+          (-> ~graphics-2d-sym
+              ~@sexprs)))
 
 (def-g2d-method draw [obj])
 
