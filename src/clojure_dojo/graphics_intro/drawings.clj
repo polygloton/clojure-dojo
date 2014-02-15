@@ -15,6 +15,49 @@
            :title "The first Clojure 2D program"
            :size [350 80]))
 
+(defmacro draw-small-square [g2d color x y]
+  `(-> ~g2d
+       (g/set-paint ~color)
+       (g/fill (g/rectangle ~x ~y 4 4))))
+
+(def-drawing curve-demo [g2d]
+  (-> g2d
+      (g/set-antialias-on)
+      (g/set-basic-stroke 3.0)
+      (g/draw (g/line 200 200
+                      300 300))
+      (draw-small-square blue 200 200)
+      (draw-small-square red 300 300)
+      (g/set-paint black)
+      (g/draw (g/quad-curve 300 50
+                            500 500
+                            550 100))
+      (draw-small-square blue 300 50)
+      (g/draw-line 300 50
+                   500 500)
+      (draw-small-square green 500 500)
+      (draw-small-square red 550 100)
+      (g/draw-line 550 100
+                   500 500)
+      (g/set-paint black)
+      (g/draw (g/cubic-curve 100 50
+                             150 100
+                             50 500
+                             100 400))
+      (draw-small-square blue 100 50)
+      (g/draw-line 100 50
+                   150 100)
+      (draw-small-square green 150 100)
+      (draw-small-square magenta 50 500)
+      (draw-small-square red 100 400)
+      (g/draw-line 50 500
+                   100 400)))
+
+(comment
+  (g/paint (curve-demo)
+           :title "A cubic curve, a line segment, and a quadratic curve"
+           :size [600 600]))
+
 (def-drawing coordinate-system [g2d x-max y-max]
   (let [x-offset 30
         y-offset 40

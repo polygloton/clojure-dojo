@@ -1,14 +1,18 @@
 (ns ^{:doc "Clojure wrapper around Java's 2D Graphics libs"}
-    clojure-dojo.graphics-intro.graphics
+  clojure-dojo.graphics-intro.graphics
   (:import java.awt.BasicStroke
+           java.awt.Color
            java.awt.Font
            java.awt.Frame
            java.awt.Graphics
            java.awt.Graphics2D
            java.awt.RenderingHints
            java.awt.Window
+           java.awt.geom.CubicCurve2D$Double
            java.awt.geom.Ellipse2D$Double
            java.awt.geom.GeneralPath
+           java.awt.geom.Line2D$Double
+           java.awt.geom.QuadCurve2D$Double
            java.awt.geom.Rectangle2D$Double
            java.awt.event.WindowAdapter
            java.awt.event.WindowEvent))
@@ -55,6 +59,8 @@
 
 (def-g2d-method draw [obj])
 
+(def-g2d-method fill [shape])
+
 (def-g2d-method draw-line [x1 y1 x2 y2])
 
 (def-g2d-method draw-string [str x y])
@@ -62,6 +68,11 @@
 (def-g2d-setter set-font Font [font])
 
 (def-g2d-getter get-font Font)
+
+(def-g2d-setter set-paint_ Paint [color])
+
+(defmacro set-paint [g2d color-sym]
+  `(set-paint_ ~g2d ~(symbol (format "java.awt.Color/%s" color-sym))))
 
 (def-g2d-setter set-rendering-hint RenderingHint [name value])
 
@@ -123,6 +134,15 @@
 
 (defn ellipse [x y width height]
   (Ellipse2D$Double. x y width height))
+
+(defn line [x-start y-start x-end y-end]
+  (Line2D$Double. x-start y-start x-end y-end))
+
+(defn quad-curve [x1 y1 ctrl-x ctrl-y x2 y2]
+  (QuadCurve2D$Double. x1 y1 ctrl-x ctrl-y x2 y2))
+
+(defn cubic-curve [x1 y2 ctrl-x1 ctrl-y1 ctrl-x2 ctrl-y2 x2 y2]
+  (CubicCurve2D$Double. x1 y2 ctrl-x1 ctrl-y1 ctrl-x2 ctrl-y2 x2 y2))
 
 ;; Paint
 
