@@ -13,12 +13,12 @@
 (comment
   (g/paint (simple-2d-example)
            :title "The first Clojure 2D program"
-           :size [350 80]))
+           "size" [350 80]))
 
 (defmacro draw-small-square [g2d color x y]
   `(-> ~g2d
        (g/set-paint ~color)
-       (g/fill (g/rectangle ~x ~y 4 4))))
+       (g/fill (g/rectangle (- ~x 2) (- ~y 2) 4 4))))
 
 (def-drawing curve-demo [g2d]
   (-> g2d
