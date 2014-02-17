@@ -1,4 +1,7 @@
-(ns clojure-dojo.graphics-intro.drawings
+(ns ^{:doc "Examples from Introduction to Computer Graphics Using Java 2D
+            3D, book and original example code by Frank Klawonn.
+            The example code here is translated to Clojure by Stephen Sloan."}
+    clojure-dojo.graphics-intro.drawings
   (:require [clojure-dojo.graphics-intro.graphics :as g]
             [lonocloud.synthread :as ->]))
 
