@@ -120,3 +120,60 @@
   (g/paint-fn (comp #(coordinate-system % 430 180) rectangle-ellipse-example)
                      :title "Rectangle and ellipse"
                      :size [450 200]))
+
+(def-drawing area-example [g2d]
+  (let [radius 50
+        start-x 100
+        start-y 100
+        width 70
+        height 100
+        rect-shift-x -10
+        rect-shift-y 10
+        x-shift 140]
+    (-> g2d
+        (g/set-antialias-on)
+        (g/fill (g/add
+                 (g/area
+                  (g/circle start-x
+                            start-y
+                            radius))
+                 (g/area
+                  (g/rectangle (+ start-x rect-shift-x)
+                               (+ start-y rect-shift-y)
+                               width
+                               height))))
+        (g/fill (g/intersect
+                 (g/area
+                  (g/circle (+ start-x x-shift)
+                            start-y
+                            radius))
+                 (g/area
+                  (g/rectangle (+ start-x rect-shift-x x-shift)
+                               (+ start-y rect-shift-y)
+                               width
+                               height))))
+        (g/fill (g/subtract
+                 (g/area
+                  (g/circle (+ start-x (* 2 x-shift))
+                            start-y
+                            radius))
+                 (g/area
+                  (g/rectangle (+ start-x rect-shift-x (* 2 x-shift))
+                               (+ start-y rect-shift-y)
+                               width
+                               height))))
+        (g/fill (g/exclusive-or
+                (g/area
+                 (g/circle (+ start-x (* 3 x-shift))
+                           start-y
+                           radius))
+                (g/area
+                 (g/rectangle (+ start-x rect-shift-x (* 3 x-shift))
+                              (+ start-y rect-shift-y)
+                              width
+                              height)))))))
+
+(comment
+  (g/paint (area-example)
+           :title "Operations for combining areas"
+           :size [600 250]))
