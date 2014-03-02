@@ -9,6 +9,7 @@
            java.awt.RenderingHints
            java.awt.Window
            java.awt.geom.Arc2D$Double
+           java.awt.geom.Area
            java.awt.geom.CubicCurve2D$Double
            java.awt.geom.Ellipse2D$Double
            java.awt.geom.GeneralPath
@@ -155,6 +156,28 @@
 
 (defn cubic-curve [x1 y1 ctrl-x1 ctrl-y1 ctrl-x2 ctrl-y2 x2 y2]
   (CubicCurve2D$Double. x1 y1 ctrl-x1 ctrl-y1 ctrl-x2 ctrl-y2 x2 y2))
+
+(defn circle [x y radius]
+  (ellipse (- x radius) (- y radius) (* 2 radius) (* 2 radius)))
+
+(defn area [shape]
+  (Area. shape))
+
+(defn add [^Area area1 ^Area area2]
+  (.add area1 area2)
+  area1)
+
+(defn intersect [^Area area1 ^Area area2]
+  (.intersect area1 area2)
+  area1)
+
+(defn subtract [^Area area1 ^Area area2]
+  (.subtract area1 area2)
+  area1)
+
+(defn exclusive-or [^Area area1 ^Area area2]
+  (.exclusiveOr area1 area2)
+  area1)
 
 ;; Paint
 

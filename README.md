@@ -3,6 +3,10 @@
 This is my personal space for practicing and learning how to program,
 specifically using Clojure.  This is my personal coding dojo.
 
+## Introduction to Computer Graphics
+
+In support of Coding The Matrix, I am reading [Introduction to Computer Graphics](http://www.springer.com/computer/image+processing/book/978-1-84628-848-7).
+
 ## Coding The Matrix
 
 I am working on [Coding The Matrix](http://codingthematrix.com/).  Of course I am translating the Python code into Clojure as I go.
