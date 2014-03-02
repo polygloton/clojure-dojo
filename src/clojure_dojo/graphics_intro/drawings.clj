@@ -16,7 +16,7 @@
 (comment
   (g/paint (simple-2d-example)
            :title "The first Clojure 2D program"
-           "size" [350 80]))
+           :size [350 80]))
 
 (defmacro draw-small-square [g2d color x y]
   `(-> ~g2d
