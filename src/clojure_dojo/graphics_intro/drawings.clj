@@ -123,3 +123,31 @@
   (g/paint-fn (comp #(coordinate-system % 430 180) rectangle-ellipse-example)
                      :title "Rectangle and ellipse"
                      :size [450 200]))
+
+(def-drawing arc-example [g2d]
+  (let [thin-stroke (g/basic-stroke 1.0)
+        thick-stroke (g/basic-stroke 3.0)
+        rect1 (g/rectangle 50 50
+                           200 100)
+        rect2 (g/rectangle 300 50
+                           200 100)
+        rect3 (g/rectangle 550 50
+                            200 100)]
+    (-> g2d
+        (g/set-antialias-on)
+        (g/set-stroke thin-stroke)
+        (g/draw rect1)
+        (g/set-stroke thick-stroke)
+        (g/draw (g/arc rect1 45 90 OPEN))
+        (g/set-stroke thin-stroke)
+        (g/draw rect2)
+        (g/set-stroke thick-stroke)
+        (g/draw (g/arc rect2 45 90 PIE))
+        (g/set-stroke thin-stroke)
+        (g/draw rect3)
+        (g/set-stroke thick-stroke)
+        (g/draw (g/arc rect3 45 90 CHORD)))))
+
+(comment (g/paint (arc-example)
+                  :title "Ellipse arc, section and segment"
+                  :size [800 200]))

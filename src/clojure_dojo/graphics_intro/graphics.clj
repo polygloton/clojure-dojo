@@ -8,11 +8,13 @@
            java.awt.Graphics2D
            java.awt.RenderingHints
            java.awt.Window
+           java.awt.geom.Arc2D$Double
            java.awt.geom.CubicCurve2D$Double
            java.awt.geom.Ellipse2D$Double
            java.awt.geom.GeneralPath
            java.awt.geom.Line2D$Double
            java.awt.geom.QuadCurve2D$Double
+           java.awt.geom.Rectangle2D
            java.awt.geom.Rectangle2D$Double
            java.awt.event.WindowAdapter
            java.awt.event.WindowEvent))
@@ -85,8 +87,11 @@
                       RenderingHints/KEY_ANTIALIASING
                       RenderingHints/VALUE_ANTIALIAS_ON))
 
+(defn basic-stroke [float_]
+  (BasicStroke. float_))
+
 (defn set-basic-stroke [g2d stroke]
-  (set-stroke g2d (BasicStroke. stroke)))
+  (set-stroke g2d (basic-stroke stroke)))
 
 ;; Fonts
 
@@ -128,6 +133,13 @@
 (def-genpath-method curve-to [x1 y1 x2 y2 x3 y3])
 
 ;; Shapes
+
+(defn arc_ [^Rectangle2D ellipse-bounds start extent type]
+  (Arc2D$Double. ellipse-bounds start extent type))
+
+(defmacro arc [ellipse-bounds start extent type-sym]
+  `(arc_ ~ellipse-bounds ~start ~extent
+         ~(symbol (format "java.awt.geom.Arc2D/%s" type-sym))))
 
 (defn rectangle [x y width height]
   (Rectangle2D$Double. x y width height))
