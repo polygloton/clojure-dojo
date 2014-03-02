@@ -141,8 +141,8 @@
 (defn quad-curve [x1 y1 ctrl-x ctrl-y x2 y2]
   (QuadCurve2D$Double. x1 y1 ctrl-x ctrl-y x2 y2))
 
-(defn cubic-curve [x1 y2 ctrl-x1 ctrl-y1 ctrl-x2 ctrl-y2 x2 y2]
-  (CubicCurve2D$Double. x1 y2 ctrl-x1 ctrl-y1 ctrl-x2 ctrl-y2 x2 y2))
+(defn cubic-curve [x1 y1 ctrl-x1 ctrl-y1 ctrl-x2 ctrl-y2 x2 y2]
+  (CubicCurve2D$Double. x1 y1 ctrl-x1 ctrl-y1 ctrl-x2 ctrl-y2 x2 y2))
 
 ;; Paint
 
