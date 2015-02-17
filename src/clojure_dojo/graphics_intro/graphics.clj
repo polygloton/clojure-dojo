@@ -8,6 +8,7 @@
            java.awt.Graphics2D
            java.awt.RenderingHints
            java.awt.Window
+           java.awt.geom.AffineTransform
            java.awt.geom.Area
            java.awt.geom.CubicCurve2D$Double
            java.awt.geom.Ellipse2D$Double
@@ -21,7 +22,7 @@
 ;; Custom function definers
 
 (defn ^:private ->camel-case [^String method-name]
-  (clojure.string/replace method-name #"-(\w)" 
+  (clojure.string/replace method-name #"-(\w)"
                           #(clojure.string/upper-case (second %1))))
 
 (defmacro def-frame-setter [name method-sym args]
@@ -89,7 +90,22 @@
 (defn set-basic-stroke [g2d stroke]
   (set-stroke g2d (BasicStroke. stroke)))
 
+(defmacro basic-stroke [a b c d e f]
+  `(BasicStroke. ~a
+                 ~(symbol (format "java.awt.BasicStroke/%s" b))
+                 ~(symbol (format "java.awt.BasicStroke/%s" c))
+                 ~d
+                 ~e
+                 ~f))
+
 ;; Fonts
+
+(defmacro with-font [^Graphics2D g2d ^Font font & sexprs]
+  `(let [^Font orig-font# (.getFont ~g2d)]
+     (.setFont ~g2d ~font)
+     (let [result# (do ~@sexprs)]
+       (.setFont ~g2d orig-font#)
+       result#)))
 
 (defmacro with-font-> [^Graphics2D g2d ^Font font & sexprs]
   `(let [^Font orig-font# (.getFont ~g2d)]
@@ -166,6 +182,30 @@
 (defn exclusive-or [^Area area1 ^Area area2]
   (.exclusiveOr area1 area2)
   area1)
+
+;; Transforms
+
+(defn affine-transform []
+  (AffineTransform.))
+
+(defn set-to-scale [^AffineTransform at x y]
+  (.setToScale at x y)
+  at)
+
+(defn set-to-translation [^AffineTransform at x y]
+  (.setToTranslation at x y)
+  at)
+
+(defn pre-concatenate [^AffineTransform at1 ^AffineTransform at2]
+  (.preConcatenate at1 at2)
+  at1)
+
+(defn transform [^Graphics2D g2d ^AffineTransform at]
+  (.transform g2d at)
+  g2d)
+
+(defn create-transformed-shape [^AffineTransform at shape]
+  (.createTransformedShape at shape))
 
 ;; Paint
 

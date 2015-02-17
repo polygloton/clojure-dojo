@@ -177,3 +177,43 @@
   (g/paint (area-example)
            :title "Operations for combining areas"
            :size [600 250]))
+
+(def-drawing affine-coordinate-system [g2d x-max y-max]
+  (let [x-offset 0
+        y-offset 0
+        step 20
+        flip (g/affine-transform)
+        lift (g/affine-transform)
+        font-size 13]
+    (g/with-font g2d (g/font "serif" PLAIN font-size)
+      (g/set-to-scale flip 1 -1)
+      (g/set-to-translation lift 0 font-size)
+      (g/pre-concatenate flip lift))))
+
+(def-drawing scaling-example [g2d height]
+  (g/set-antialias-on g2d)
+  (let [y-up (g/affine-transform)
+        translate (g/affine-transform)
+        scaling (g/affine-transform)
+        rect (g/rectangle 80 120 100 60)]
+    (g/set-to-scale y-up 1 -1)
+    (g/set-to-translation translate 40 (- height 50))
+    (g/pre-concatenate y-up translate)
+    (g/transform g2d y-up)
+    (g/set-basic-stroke g2d 3.0)
+    (g/draw g2d rect)
+    (g/set-to-scale scaling 2 0.5)
+    (g/set-stroke g2d (g/basic-stroke 3.0
+                                      CAP_BUTT
+                                      JOIN_BEVEL
+                                      8.0
+                                      (float-array 50.0 10.0)
+                                      4.0))
+    (g/draw g2d (g/create-transformed-shape scaling rect))
+    (g/set-basic-stroke 1.0)))
+
+(comment
+  (let [height 300]
+    (g/paint (scaling-example height)
+             :title "Scaling examples"
+             :size [500, height])))
