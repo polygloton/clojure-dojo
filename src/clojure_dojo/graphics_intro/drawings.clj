@@ -1,6 +1,9 @@
 (ns ^{:doc "Examples from Introduction to Computer Graphics Using Java 2D
             3D, book and original example code by Frank Klawonn.
-            The example code here is translated to Clojure by Stephen Sloan."}
+            The example code here is translated to Clojure by Stephen Sloan.
+
+            Here is the book (and original code examples):
+            http://public.fh-wolfenbuettel.de/~klawonn/computergraphics/"}
   clojure-dojo.graphics-intro.drawings
   (:require [graphics.affine-transforms :as at]
             [graphics.common :refer [def-drawing]]
@@ -210,6 +213,32 @@
               :title "Operations for combining areas"
               :size [600 250]))
 
+(def-drawing affine-coordinate-system [g2d x-max y-max]
+  (let [x-offset 0
+        y-offset 0
+        step 20
+        font-size 13
+        lift (doto (at/affine-transform)
+               (at/set-to-translation 0 font-size))
+        flip (doto (at/affine-transform)
+               (at/set-to-scale 1 -1)
+               (at/pre-concatenate lift))]
+    (-> g2d
+        (fnt/with-font-> (fnt/derive-font (fnt/font "serif" PLAIN font-size)
+                                          flip)
+          ;; x-axis
+          (g/draw-line x-offset y-offset x-max y-offset)
+          (->/for [i (range (+ x-offset step) (+ 1 x-max) step)]
+            (g/draw-line i (- y-offset 2) i (+ y-offset 2))
+            (g/draw-string (str i) (- i 7) (- y-offset 30)))
+          ;; y-axis
+          (g/draw-line x-offset y-offset x-offset y-max)
+          (->/for [i (range (+ y-offset step) (+ 1 y-max) step)]
+            (g/draw-line (- x-offset 2) i (+ x-offset 2) i)
+            (g/draw-string (str (if (> i 99) "" "  ") i)
+                           (- x-offset 25)
+                           (- i 20)))))))
+
 (def-drawing scaling-example [g2d height]
   (g/set-antialias-on g2d)
   (let [y-up (at/affine-transform)
@@ -230,10 +259,11 @@
                                       [50.0 10.0]
                                       4.0))
     (g/draw g2d (at/create-transformed-shape scaling rect))
-    (g/set-basic-stroke 1.0)))
+    (g/set-basic-stroke g2d 1.0)))
 
 (comment
   (let [height 300]
-    (f/paint-fn #(scaling-example % height)
+    (f/paint-fn (comp #(affine-coordinate-system % 400 200)
+                      #(scaling-example % height))
                 :title "Scaling examples"
                 :size [500 height])))

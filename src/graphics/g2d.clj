@@ -53,4 +53,5 @@
                    (float dash_phase)))))
 
 (defn set-basic-stroke [g2d stroke]
-  (set-stroke g2d (basic-stroke stroke)))
+  (set-stroke g2d (basic-stroke stroke))
+  g2d)
