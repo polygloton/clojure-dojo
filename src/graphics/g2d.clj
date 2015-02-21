@@ -35,8 +35,22 @@
                       RenderingHints/KEY_ANTIALIASING
                       RenderingHints/VALUE_ANTIALIAS_ON))
 
-(defn basic-stroke [float_]
-  (BasicStroke. float_))
+(let [caps  {:butt   BasicStroke/CAP_BUTT
+             :round  BasicStroke/CAP_ROUND
+             :square BasicStroke/CAP_SQUARE}
+      joins {:bevel  BasicStroke/JOIN_BEVEL
+             :miter  BasicStroke/JOIN_MITER
+             :round  BasicStroke/JOIN_ROUND}]
+  (defn basic-stroke
+    ([width]
+     (BasicStroke. (float width)))
+    ([width cap-kw join-kw miterlimit dash-v dash_phase]
+     (BasicStroke. (float width)
+                   (get caps cap-kw)
+                   (get joins join-kw)
+                   (float miterlimit)
+                   (apply float-array dash-v)
+                   (float dash_phase)))))
 
 (defn set-basic-stroke [g2d stroke]
   (set-stroke g2d (basic-stroke stroke)))

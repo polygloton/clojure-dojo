@@ -2,7 +2,8 @@
             3D, book and original example code by Frank Klawonn.
             The example code here is translated to Clojure by Stephen Sloan."}
   clojure-dojo.graphics-intro.drawings
-  (:require [graphics.common :refer [def-drawing]]
+  (:require [graphics.affine-transforms :as at]
+            [graphics.common :refer [def-drawing]]
             [graphics.fonts :as fnt]
             [graphics.frames :as f]
             [graphics.general-paths :as gp]
@@ -208,3 +209,31 @@
   (f/paint-fn area-example
               :title "Operations for combining areas"
               :size [600 250]))
+
+(def-drawing scaling-example [g2d height]
+  (g/set-antialias-on g2d)
+  (let [y-up (at/affine-transform)
+        translate (at/affine-transform)
+        scaling (at/affine-transform)
+        rect (s/rectangle 80 120 100 60)]
+    (at/set-to-scale y-up 1 -1)
+    (at/set-to-translation translate 40 (- height 50))
+    (at/pre-concatenate y-up translate)
+    (at/transform g2d y-up)
+    (g/set-basic-stroke g2d 3.0)
+    (g/draw g2d rect)
+    (at/set-to-scale scaling 2 0.5)
+    (g/set-stroke g2d (g/basic-stroke 3.0
+                                      :butt
+                                      :bevel
+                                      8.0
+                                      [50.0 10.0]
+                                      4.0))
+    (g/draw g2d (at/create-transformed-shape scaling rect))
+    (g/set-basic-stroke 1.0)))
+
+(comment
+  (let [height 300]
+    (f/paint-fn #(scaling-example % height)
+                :title "Scaling examples"
+                :size [500 height])))
