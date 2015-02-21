@@ -68,6 +68,6 @@ lein test :reasoned-schemer
 
 ## License
 
-Copyright © 2013-2014 Stephen Sloan
+Copyright © 2013-2015 Stephen Sloan
 
 Licensed under the MIT License, see LICENSE.txt
