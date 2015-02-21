@@ -35,5 +35,8 @@
                       RenderingHints/KEY_ANTIALIASING
                       RenderingHints/VALUE_ANTIALIAS_ON))
 
+(defn basic-stroke [float_]
+  (BasicStroke. float_))
+
 (defn set-basic-stroke [g2d stroke]
-  (set-stroke g2d (BasicStroke. stroke)))
+  (set-stroke g2d (basic-stroke stroke)))

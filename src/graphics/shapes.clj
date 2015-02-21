@@ -1,10 +1,19 @@
 (ns graphics.shapes
-  (:import java.awt.geom.Area
+  (:import java.awt.geom.Arc2D$Double
+           java.awt.geom.Area
            java.awt.geom.CubicCurve2D$Double
            java.awt.geom.Ellipse2D$Double
            java.awt.geom.Line2D$Double
+           java.awt.geom.Rectangle2D
            java.awt.geom.Rectangle2D$Double
            java.awt.geom.QuadCurve2D$Double))
+
+(defn arc_ [^Rectangle2D ellipse-bounds start extent type]
+  (Arc2D$Double. ellipse-bounds start extent type))
+
+(defmacro arc [ellipse-bounds start extent type-sym]
+  `(arc_ ~ellipse-bounds ~start ~extent
+         ~(symbol (format "java.awt.geom.Arc2D/%s" type-sym))))
 
 (defn rectangle [x y width height]
   (Rectangle2D$Double. x y width height))

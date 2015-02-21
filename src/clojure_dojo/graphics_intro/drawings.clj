@@ -1,4 +1,7 @@
-(ns clojure-dojo.graphics-intro.drawings
+(ns ^{:doc "Examples from Introduction to Computer Graphics Using Java 2D
+            3D, book and original example code by Frank Klawonn.
+            The example code here is translated to Clojure by Stephen Sloan."}
+  clojure-dojo.graphics-intro.drawings
   (:require [graphics.common :refer [def-drawing]]
             [graphics.fonts :as fnt]
             [graphics.frames :as f]
@@ -120,6 +123,34 @@
   (f/paint-fn (comp #(coordinate-system % 430 180) rectangle-ellipse-example)
               :title "Rectangle and ellipse"
               :size [450 200]))
+
+(def-drawing arc-example [g2d]
+  (let [thin-stroke (g/basic-stroke 1.0)
+        thick-stroke (g/basic-stroke 3.0)
+        rect1 (s/rectangle 50 50
+                           200 100)
+        rect2 (s/rectangle 300 50
+                           200 100)
+        rect3 (s/rectangle 550 50
+                            200 100)]
+    (-> g2d
+        (g/set-antialias-on)
+        (g/set-stroke thin-stroke)
+        (g/draw rect1)
+        (g/set-stroke thick-stroke)
+        (g/draw (s/arc rect1 45 90 OPEN))
+        (g/set-stroke thin-stroke)
+        (g/draw rect2)
+        (g/set-stroke thick-stroke)
+        (g/draw (s/arc rect2 45 90 PIE))
+        (g/set-stroke thin-stroke)
+        (g/draw rect3)
+        (g/set-stroke thick-stroke)
+        (g/draw (s/arc rect3 45 90 CHORD)))))
+
+(comment (f/paint arc-example
+                  :title "Ellipse arc, section and segment"
+                  :size [800 200]))
 
 (def-drawing area-example [g2d]
   (let [radius 50
