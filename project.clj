@@ -6,7 +6,8 @@
             :distribution "manual"}
   :min-lein-version "2.0.0"
   :pendantic? :warn
-  :dependencies [[org.clojure/clojure "1.5.1"]
+  :dependencies [[org.clojure/clojure "1.7.0-alpha5"]
+                 [org.clojure/core.async "0.1.346.0-17112a-alpha"]
                  [org.clojure/core.logic "0.7.5"]
                  [org.apache.commons/commons-math3 "3.0"]
                  [lonocloud/synthread "1.0.4"]
