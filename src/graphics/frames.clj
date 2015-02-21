@@ -43,6 +43,8 @@
         (set-visible true))
     c1))
 
-(defn paint-fn [f & {:keys [title size]}]
+(defn paint-fn [f & {:keys [title size close?]
+                     :or {close? true}}]
   (doto (paint-ch :title title :size size)
-    (a/>!! f)))
+    (a/>!! f)
+    ((fn [ch] (if close? (a/close! ch))))))
